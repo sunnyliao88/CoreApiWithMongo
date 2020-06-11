@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1082
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreApiWithMongo", "CoreApiWithMongo\CoreApiWithMongo.csproj", "{0DE30D8E-8AFC-4BED-85AA-0E7241A0BE87}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DE30D8E-8AFC-4BED-85AA-0E7241A0BE87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DE30D8E-8AFC-4BED-85AA-0E7241A0BE87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DE30D8E-8AFC-4BED-85AA-0E7241A0BE87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DE30D8E-8AFC-4BED-85AA-0E7241A0BE87}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F0A5C0A-0AFA-4E40-9FEB-CC534519CF4A}
+	EndGlobalSection
+EndGlobal
