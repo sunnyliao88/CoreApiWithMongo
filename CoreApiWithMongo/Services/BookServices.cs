@@ -15,8 +15,8 @@ namespace CoreApiWithMongo.Services
     }
     public class BookServices:IBookServices
     {
-        private IMongoDBSettings _mongoDBSettings;
-        public BookServices(IMongoDBSettings mongoDBSettings)
+        private MongoDBSettings _mongoDBSettings;
+        public BookServices(MongoDBSettings mongoDBSettings)
         {
             _mongoDBSettings = mongoDBSettings;
         }
@@ -24,7 +24,8 @@ namespace CoreApiWithMongo.Services
         public List<Book> GetBooks()
         {
             List<Book> result = new List<Book>();
-         
+
+
             MongoClient client = new MongoClient(_mongoDBSettings.Connectionsting);
             IMongoDatabase db = client.GetDatabase("demo");
             IMongoCollection<Book> col = db.GetCollection<Book>("Books");

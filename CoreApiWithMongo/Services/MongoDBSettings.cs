@@ -7,23 +7,35 @@ using System.Threading.Tasks;
 namespace CoreApiWithMongo.Services
 {
 
-  public  interface IMongoDBSettings
+    //public interface IMongoDBSettings
+    //{
+    //    string Connectionsting { get; }
+    //}
+
+    //public class MongoDBSettings : IMongoDBSettings
+    //{
+    //    private IConfiguration _configuration;
+
+    //    public MongoDBSettings(IConfiguration configuration)
+    //    {
+    //        _configuration = configuration;
+    //    }
+
+    //    public string Connectionsting
+    //    {
+    //        get
+    //        {
+    //            return _configuration.GetSection("MongoDBConnectionsting").Value;
+    //        }
+    //    }
+    //}
+
+
+    public class MongoDBSettings
     {
-        string Connectionsting { get; }
-    }
-    public class MongoDBSettings : IMongoDBSettings
-    {
-        private IConfiguration _configuration;
-        public MongoDBSettings(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
         public string Connectionsting
         {
-            get
-            {
-                return this._configuration.GetSection("MongoDBConnectionsting").Value;
-            }
+            get; set;
         }
     }
 }
