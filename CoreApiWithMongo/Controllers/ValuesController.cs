@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreApiWithMongo.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoreApiWithMongo.Controllers
@@ -10,11 +11,20 @@ namespace CoreApiWithMongo.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private IDIDemo _dIDemo;
+        public ValuesController(IDIDemo dIDemo )
+        {
+            _dIDemo = dIDemo;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+           // throw new Exception("THIS IS TEST");
+
+            // DIDemo dIDemo = new DIDemo();           
+            return new string[] { _dIDemo.Id.ToString(), _dIDemo.Name, "value2" };
         }
 
         // GET api/values/5
