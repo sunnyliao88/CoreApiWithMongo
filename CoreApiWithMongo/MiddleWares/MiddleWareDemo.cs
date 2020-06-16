@@ -37,16 +37,13 @@ namespace CoreApiWithMongo.MiddleWares
               await context.Response.WriteAsync("\n");
               */
 
-          //  await context.Response.WriteAsync("this is response line1 before next");
-            await _next.Invoke(context);
-            await context.Response.WriteAsync("this is response line1 after next");
-            await context.Response.WriteAsync("\n");
-            await context.Response.WriteAsync(DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt"));
-            await context.Response.WriteAsync("\n");
+            //  await context.Response.WriteAsync("this is response line1 before next");
+            await _next(context);
+            /* await context.Response.WriteAsync("this is response line1 after next");
+             await context.Response.WriteAsync("\n");
+             await context.Response.WriteAsync(DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt"));
+             await context.Response.WriteAsync("\n");
+             */
         }
     }
-
-    
-
-
 }
