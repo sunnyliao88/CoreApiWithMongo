@@ -11,10 +11,10 @@ namespace CoreApiWithMongo.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private IDIDemo _dIDemo;
-        public ValuesController(IDIDemo dIDemo )
+       
+        public ValuesController( )
         {
-            _dIDemo = dIDemo;
+            
         }
 
         // GET api/values
@@ -24,7 +24,7 @@ namespace CoreApiWithMongo.Controllers
            // throw new Exception("THIS IS TEST");
 
             // DIDemo dIDemo = new DIDemo();           
-            return new string[] { _dIDemo.Id.ToString(), _dIDemo.Name, "value2" };
+            return new string[] { "QQ", "WW" };
         }
 
         // GET api/values/5

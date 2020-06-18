@@ -15,10 +15,11 @@ namespace CoreApiWithMongo.Services
     }
     public class BookServices:IBookServices
     {
-        private MongoDBSettings _mongoDBSettings;
-        public BookServices(MongoDBSettings mongoDBSettings)
+        private readonly SqlDBSettings _DBSettings;
+        
+        public BookServices(SqlDBSettings DBSettings)
         {
-            _mongoDBSettings = mongoDBSettings;
+            _DBSettings = DBSettings;
         }
 
         public List<Book> GetBooks()
@@ -26,7 +27,7 @@ namespace CoreApiWithMongo.Services
             List<Book> result = new List<Book>();
 
 
-            MongoClient client = new MongoClient(_mongoDBSettings.Connectionsting);
+            MongoClient client = new MongoClient(_DBSettings.Connectionsting);
             IMongoDatabase db = client.GetDatabase("demo");
             IMongoCollection<Book> col = db.GetCollection<Book>("Books");
             result = col.Find(b => true).ToList();

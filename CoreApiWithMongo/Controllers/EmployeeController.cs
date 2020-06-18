@@ -20,11 +20,11 @@ namespace CoreApiWithMongo.Controllers
             _employeeService = employeeService;
         }
 
-        
+
 
         [Route("/")]
-     //   [Route("/[controller]")]
-          [Route("")]
+        //   [Route("/[controller]")]
+        [Route("")]
         //[Route("Employee")]
         //[Route("Employee/Index")]
         //[Route("Index")]
@@ -50,52 +50,57 @@ namespace CoreApiWithMongo.Controllers
             //return View("../test/test1", employee);
         }
 
-        
 
-            public ActionResult Create()
+        public ActionResult Create()
         {
             return View();
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Employee employee)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(employee);
+            }
+
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
+                Employee addedEmployee = _employeeService.Add(employee);
+                return RedirectToAction(nameof(Details), new { id = addedEmployee.ID });
             }
             catch
             {
-                return View();
+                return View(employee);
             }
         }
 
-        // [Route("[action]")]
 
         // GET: Employee/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Employee employee = _employeeService.GetEmployeeById(id);
+            return View(employee);
         }
 
         // POST: Employee/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Employee employee)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(employee);
+            }
             try
             {
-                // TODO: Add update logic here
-
+                _employeeService.Update(employee);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(employee);
             }
         }
 
@@ -103,23 +108,27 @@ namespace CoreApiWithMongo.Controllers
         // GET: Employee/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Employee employee = _employeeService.GetEmployeeById(id);
+            return View(employee);
         }
 
         // POST: Employee/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Employee employee)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(employee);
+            }
             try
             {
-                // TODO: Add delete logic here
-
+                _employeeService.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(employee);
             }
         }
     }

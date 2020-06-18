@@ -31,11 +31,18 @@ namespace CoreApiWithMongo.Services
     //}
 
 
+    //public interface IDBSettings
+    //{
+    //    string Connectionsting { get; set; }
+    //}
+
     public class MongoDBSettings
     {
-        public string Connectionsting
-        {
-            get; set;
-        }
+        public string Connectionsting { get; set; }
+    }
+
+    public class SqlDBSettings
+    {
+        public string Connectionsting { get; set; }
     }
 }

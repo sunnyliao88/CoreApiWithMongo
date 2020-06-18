@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreApiWithMongo.Data;
 using CoreApiWithMongo.MiddleWares;
 using CoreApiWithMongo.Services;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,20 +31,26 @@ namespace CoreApiWithMongo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddXmlSerializerFormatters();
+
+            //SqlDBSettings sqlDBSettings = new SqlDBSettings();
+           // Configuration.Bind("SqlDBSettings", sqlDBSettings);
+           // services.AddSingleton(sqlDBSettings);
+
+            services.AddDbContextPool<AppDBContext>(
+                options=>options.UseSqlServer(Configuration.GetConnectionString("CoreApiWithMongo")));
+            // services.AddSingleton<IDBSettings, MongoDBSettings>();
+
+           
             
-            // services.AddSingleton<IMongoDBSettings, MongoDBSettings>();
-            MongoDBSettings mongoDBSettings = new MongoDBSettings();
-            Configuration.Bind("MongoDBSettings", mongoDBSettings);
-            services.AddSingleton(mongoDBSettings);
-            //  IConfigurationSection conf=   Configuration.GetSection("test");
-
             services.AddSingleton<IBookServices, BookServices>();
+           // services.AddSingleton<IEmployeeService, MockEmployeeService>();
+            services.AddScoped<IEmployeeService, SQLEmployeeService>();
 
-            // services.AddSingleton<IDIDemo, DIDemoOracle>();
-            services.AddSingleton<IDIDemo, DIDemoSQL>();
-            // services.AddSingleton<IDIDemo, DIDemoOracle>();
-
-            services.AddScoped<IEmployeeService, MockEmployeeService>();
+            //  services.AddSingleton(typeof(DemoService));
+            services.AddSingleton<DemoService>();
+          //  services.AddSingleton<DemoService, DemoService>();
+           // services.AddSingleton(typeof(DemoService), new DemoService());
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +89,6 @@ namespace CoreApiWithMongo
             app.UseStaticFiles();
 
             app.UseMiddleware<MiddleWareDemo>();
-
 
             // app.UseMvc();
             app.UseMvc(routes =>

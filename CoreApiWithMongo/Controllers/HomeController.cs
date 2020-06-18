@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreApiWithMongo.Data;
 using CoreApiWithMongo.Models;
 using CoreApiWithMongo.Services;
 using Microsoft.AspNetCore.Http;
@@ -12,15 +13,20 @@ namespace CoreApiWithMongo.Controllers
     public class HomeController : Controller
     {
         private readonly IEmployeeService _employeeService;
+        private readonly DemoService _demoService;
+       
 
-        public HomeController(IEmployeeService employeeService)
+        public HomeController(IEmployeeService employeeService, DemoService demoService)
         {
             _employeeService = employeeService;
+            _demoService = demoService;
+            
         }
         // GET: Home
         public string Index()
         {
-            return "home/index";
+           // _appDBContext.e
+            return _demoService.DoSomething();
         }
 
         // GET: Home/Details/5
