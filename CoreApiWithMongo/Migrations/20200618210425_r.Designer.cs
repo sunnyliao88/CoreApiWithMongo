@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreApiWithMongo.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200618201759_int")]
-    partial class @int
+    [Migration("20200618210425_r")]
+    partial class r
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,6 +19,19 @@ namespace CoreApiWithMongo.Migrations
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CoreApiWithMongo.Models.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DepartmentName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
 
             modelBuilder.Entity("CoreApiWithMongo.Models.Employee", b =>
                 {
@@ -39,6 +52,24 @@ namespace CoreApiWithMongo.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Department = 0,
+                            DepartmentId = 1,
+                            Email = "n1@e.com",
+                            Name = "n1"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Department = 1,
+                            DepartmentId = 2,
+                            Email = "n2@e.com",
+                            Name = "n2"
+                        });
                 });
 #pragma warning restore 612, 618
         }

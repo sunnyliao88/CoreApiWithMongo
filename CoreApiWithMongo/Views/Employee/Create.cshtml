@@ -1,4 +1,4 @@
-﻿@model CoreApiWithMongo.Models.Employee
+﻿@model EmployeeCreateVM
 
 @{
     ViewData["Title"] = "Create";
@@ -8,7 +8,7 @@
 <hr />
 
 <div>
-    <form asp-action="Create"  class="">
+    <form asp-action="Create" class="" enctype="multipart/form-data">
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -28,6 +28,11 @@
                 <option value="">Select...</option>
             </select>
             <span asp-validation-for="Department" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UploadFile" class="control-label"></label>
+            <input asp-for="UploadFile" class="form-control"  />
+            <span asp-validation-for="UploadFile" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />
