@@ -45,6 +45,7 @@ namespace CoreApiWithMongo
             services.AddSingleton<IBookServices, BookServices>();
            // services.AddSingleton<IEmployeeService, MockEmployeeService>();
             services.AddScoped<IEmployeeService, SQLEmployeeService>();
+            services.AddScoped<IDepartmentService, SQLDepartmentService>();
 
             //  services.AddSingleton(typeof(DemoService));
             services.AddSingleton<DemoService>();

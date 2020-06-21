@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreApiWithMongo.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200618210425_r")]
-    partial class r
+    [Migration("20200619213243_initDB")]
+    partial class initDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,18 @@ namespace CoreApiWithMongo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DepartmentName = "IT"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DepartmentName = "HR"
+                        });
                 });
 
             modelBuilder.Entity("CoreApiWithMongo.Models.Employee", b =>
@@ -39,17 +51,21 @@ namespace CoreApiWithMongo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Department");
-
                     b.Property<int>("DepartmentId");
 
                     b.Property<string>("Email")
                         .IsRequired();
 
+                    b.Property<string>("FileContent");
+
+                    b.Property<string>("FileName");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("ID");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
 
@@ -57,19 +73,25 @@ namespace CoreApiWithMongo.Migrations
                         new
                         {
                             ID = 1,
-                            Department = 0,
                             DepartmentId = 1,
-                            Email = "n1@e.com",
+                            Email = "n1@a.com",
                             Name = "n1"
                         },
                         new
                         {
                             ID = 2,
-                            Department = 1,
-                            DepartmentId = 2,
-                            Email = "n2@e.com",
+                            DepartmentId = 1,
+                            Email = "n2@a.com",
                             Name = "n2"
                         });
+                });
+
+            modelBuilder.Entity("CoreApiWithMongo.Models.Employee", b =>
+                {
+                    b.HasOne("CoreApiWithMongo.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

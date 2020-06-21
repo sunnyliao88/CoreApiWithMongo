@@ -11,22 +11,23 @@ using System.Threading.Tasks;
 namespace CoreApiWithMongo.Models
 {
     public class Employee
-    {        
+    {
         public int ID { get; set; }
 
         [Required]
-        public string  Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [EmailAddress]
-        public string  Email { get; set; }
-
-        [Required]      
-        public DepartmentEnum? Department { get; set; }
+        public string Email { get; set; }
 
         public int DepartmentId { get; set; }
-        public string  FileContent { get; set; }
+        public string FileContent { get; set; }
         public string FileName { get; set; }
+
+        public virtual Department Department { get; set; }
+
+        
 
 
     }

@@ -19,9 +19,13 @@ namespace CoreApiWithMongo.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Department>().HasData(
+                new Department { Id = 1, DepartmentName = "IT" },
+                new Department { Id = 2, DepartmentName = "HR" }
+                );
             modelBuilder.Entity<Employee>().HasData(
-                new Employee { ID = 1, Name = "n1", Email = "n1@e.com", Department = Enums.DepartmentEnum.IT, DepartmentId = 1 },
-                new Employee { ID = 2, Name = "n2", Email = "n2@e.com", Department = Enums.DepartmentEnum.HR, DepartmentId = 2 }
+                new Employee { ID = 1, DepartmentId = 1, Email = "n1@a.com", Name = "n1" },
+                new Employee { ID = 2, DepartmentId = 2, Email = "n2@a.com", Name = "n2" }
                 );
 
         }

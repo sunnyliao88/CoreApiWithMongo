@@ -7,6 +7,7 @@ using CoreApiWithMongo.Enums;
 using CoreApiWithMongo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using CoreApiWithMongo.ViewModels;
 
 namespace CoreApiWithMongo.Services
 {
@@ -21,31 +22,31 @@ namespace CoreApiWithMongo.Services
 
     public class MockEmployeeService : IEmployeeService
     {
+        private readonly IDepartmentService _departmentService;
         List<Employee> _employees;
-        public MockEmployeeService()
+       
+        public MockEmployeeService(IDepartmentService departmentService)
         {
+            _departmentService = departmentService;
             _employees = new List<Employee>
             {
-                new Employee { ID=1,Name="name1",Department=DepartmentEnum.IT, Email="name1@a.com"},
-                new Employee { ID=2,Name="name2",Department=DepartmentEnum.HR, Email="name2@a.com"},
-                new Employee { ID=3,Name="name3",Department=DepartmentEnum.HR, Email="name3@a.com"},
-                new Employee { ID=4,Name="name4",Department=DepartmentEnum.IT, Email="name4@a.com"},
-                new Employee { ID=5,Name="name5",Department=DepartmentEnum.HR, Email="name5@a.com"},
-                new Employee { ID=6,Name="name6",Department=DepartmentEnum.Account, Email="name6@a.com"},
-                new Employee { ID=7,Name="name7",Department=DepartmentEnum.HR, Email="name7@a.com"}
+                new Employee { ID=1,Name="name1", Email="name1@a.com",DepartmentId=1,Department= _departmentService.GetDepartments().FirstOrDefault(d=>d.Id==1)},
+                new Employee { ID=2,Name="name2", Email="name2@a.com",DepartmentId=2,Department= _departmentService.GetDepartments().FirstOrDefault(d=>d.Id==2)},
+                new Employee { ID=3,Name="name3", Email="name3@a.com",DepartmentId=1,Department= _departmentService.GetDepartments().FirstOrDefault(d=>d.Id==1)},
+                new Employee { ID=4,Name="name4", Email="name4@a.com",DepartmentId=2,Department= _departmentService.GetDepartments().FirstOrDefault(d=>d.Id==2)}
             };
         }
 
         public Employee Add(Employee employee)
         {
-            employee.ID = _employees.Max(e => e.ID) + 1;
+            employee.ID = _employees.Max(e => e.ID) + 1;            
             _employees.Add(employee);
             return employee;
         }
 
         public Employee Delete(int id)
         {
-            Employee employee = _employees.FirstOrDefault(e => e.ID == id);
+            var employee = _employees.FirstOrDefault(e => e.ID == id);
             if (employee != null)
             {
                 _employees.Remove(employee);
@@ -65,16 +66,17 @@ namespace CoreApiWithMongo.Services
 
         public Employee Update(Employee model)
         {
-            Employee employee = _employees.FirstOrDefault(e => e.ID == model.ID);
+            var employee = _employees.FirstOrDefault(e => e.ID == model.ID);
             if (employee != null)
             {
                 employee.Name = model.Name;
                 employee.Email = model.Email;
-                employee.Department = model.Department;
                 employee.DepartmentId = model.DepartmentId;
+
             }
             return employee;
         }
+
     }
 
     public class SQLEmployeeService : IEmployeeService
@@ -106,12 +108,14 @@ namespace CoreApiWithMongo.Services
 
         public Employee GetEmployeeById(int id)
         {
-            return _appDBContext.Employees.FirstOrDefault(e => e.ID == id);
+            var employee = _appDBContext.Employees.Include(e => e.Department).FirstOrDefault(e => e.ID == id);
+            return employee;
         }
 
         public IEnumerable<Employee> GetEmployees()
         {
-            return _appDBContext.Employees;
+            var employees = _appDBContext.Employees.Include(e => e.Department).ToList();
+            return employees;
         }
 
         public Employee Update(Employee model)

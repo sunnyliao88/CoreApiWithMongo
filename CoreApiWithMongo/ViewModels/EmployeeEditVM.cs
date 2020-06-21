@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace CoreApiWithMongo.ViewModels
 {
-    public class EmployeeCreateVM
+    public class EmployeeEditVM
     {
+        public int ID { get; set; }
+
         [Required]
         public string Name { get; set; }
 
@@ -21,8 +23,7 @@ namespace CoreApiWithMongo.ViewModels
 
         public int DepartmentId { get; set; }
 
-        public IEnumerable<SelectListItem> Departments { get; set; }       
-        public IFormFile UploadFile { get; set; }
+        public IEnumerable<SelectListItem> Departments { get; set; }        
 
     }
 

@@ -23,11 +23,9 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Department" class="control-label"></label>
-            <select asp-for="Department" asp-items="Html.GetEnumSelectList<DepartmentEnum>()" class="form-control">
-                <option value="">Select...</option>
-            </select>
-            <span asp-validation-for="Department" class="text-danger"></span>
+            <label  class="control-label">Department</label>
+            <select asp-for="DepartmentId" asp-items="@Model.Departments" class="form-control"> </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="UploadFile" class="control-label"></label>
