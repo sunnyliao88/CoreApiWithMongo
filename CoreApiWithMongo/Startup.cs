@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using CoreApiWithMongo.AutoMap;
 using CoreApiWithMongo.Data;
 using CoreApiWithMongo.MiddleWares;
 using CoreApiWithMongo.Services;
@@ -31,6 +33,8 @@ namespace CoreApiWithMongo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddXmlSerializerFormatters();
+            
+            services.AddAutoMapper();
 
             //SqlDBSettings sqlDBSettings = new SqlDBSettings();
            // Configuration.Bind("SqlDBSettings", sqlDBSettings);

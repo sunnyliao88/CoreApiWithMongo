@@ -1,7 +1,7 @@
 ﻿@model Employee
 
 @{
-    ViewData["Title"] = "Details";   
+    ViewData["Title"] = "Details";
 }
 
 <div class="card">
@@ -9,27 +9,39 @@
         @Model.Name
     </div>
     <div class="card-body">
-        <dl class="row">            
+        <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Department)
             </dt>
             <dd class="col-sm-10">
-                @Model.Department.DepartmentName              
-
+                @Model.Department.DepartmentName
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.FileContent)
+                <label asp-for="Photo"></label>
+            </dt>
+            <dd class="col-sm-10 ">
+                <div class="col-sm-6">
+                    <img class="img-fluid" src="data:image/png;base64,@Model.Photo" asp-append-version="true" />
+                </div>
+            </dd>
+            <dt class="col-sm-2">
+                <label asp-for="Resume"></label>
             </dt>
             <dd class="col-sm-10">
-                
-                
-
+                @if (string.IsNullOrEmpty(Model.Resume))
+                {
+                    @: No Resume Updated
+                }
+                else
+                {
+                    <a href="#" class="btn btn-info">Download Resume</a>
+                }
             </dd>
         </dl>
     </div>
     <div class="card-footer">
         <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-sm btn-success float-left">Edit</a>
-        <a asp-action="Index" asp-controller="employee" class="btn btn-sm btn-success float-lg-right">Back</a>
+        <a asp-action="Index" asp-controller="employee" class="btn btn-sm btn-success float-lg-right">Back To List</a>
     </div>
 </div>
 

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreApiWithMongo.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20200619213243_initDB")]
-    partial class initDB
+    [Migration("20200621165739_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,12 +56,12 @@ namespace CoreApiWithMongo.Migrations
                     b.Property<string>("Email")
                         .IsRequired();
 
-                    b.Property<string>("FileContent");
-
-                    b.Property<string>("FileName");
-
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<string>("Photo");
+
+                    b.Property<string>("Resume");
 
                     b.HasKey("ID");
 
@@ -80,7 +80,7 @@ namespace CoreApiWithMongo.Migrations
                         new
                         {
                             ID = 2,
-                            DepartmentId = 1,
+                            DepartmentId = 2,
                             Email = "n2@a.com",
                             Name = "n2"
                         });

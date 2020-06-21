@@ -1,4 +1,5 @@
 ﻿@model EmployeeCreateVM
+@inject IDepartmentService _departmentService
 
 @{
     ViewData["Title"] = "Create";
@@ -23,17 +24,23 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label  class="control-label">Department</label>
-            <select asp-for="DepartmentId" asp-items="@Model.Departments" class="form-control"> </select>
+            <label class="control-label">Department</label>
+            <select asp-for="DepartmentId" asp-items="@_departmentService.GetDepartmentSelectListItems()" class="form-control"> </select>
             <span asp-validation-for="DepartmentId" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="UploadFile" class="control-label"></label>
-            <input asp-for="UploadFile" class="form-control"  />
-            <span asp-validation-for="UploadFile" class="text-danger"></span>
+            <label asp-for="UploadPhoto" class="control-label"></label>
+            <input asp-for="UploadPhoto" class="form-control" />
+            <span asp-validation-for="UploadPhoto" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UploadResume" class="control-label"></label>
+            <input asp-for="UploadResume" class="form-control" />
+            <span asp-validation-for="UploadResume" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />
+            <a asp-action="Index" asp-controller="employee" class="btn btn-sm btn-success float-lg-right">Back To List</a>
         </div>
     </form>
 </div>

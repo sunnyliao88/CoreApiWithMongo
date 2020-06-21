@@ -12,7 +12,7 @@
 </p>
 
 <div class="row">
-@*<div class="card-deck">*@
+    @*<div class="card-deck">*@
     @foreach (var employee in Model)
     {
         <div class="col-sm-4 text-center mb-4">
@@ -22,16 +22,15 @@
                 </div>
                 <div class="card-body text-left">
                     <div>
-                        @Html.DisplayNameFor(m => m.Email) : <a href="mailto: @employee.Email">@employee.Email</a>
+                        <label asp-for="@employee.Email"></label> : <a href="mailto: @employee.Email">@employee.Email</a>
                     </div>
                     <div>
                         @Html.DisplayNameFor(m => m.Department) : @employee.Department.DepartmentName
-                         
                     </div>
                 </div>
                 <div class="card-footer">
-                    
-                    <a asp-action="Edit"  asp-route-id="@employee.ID" class="btn btn-sm btn-success">Edit</a>
+
+                    <a asp-action="Edit" asp-route-id="@employee.ID" class="btn btn-sm btn-success">Edit</a>
                     <a asp-action="Details" asp-route-id="@employee.ID" class="btn btn-sm btn-success">Details</a>
                     <a asp-action="Delete" asp-route-id="@employee.ID" class="btn btn-sm btn-danger">Delete</a>
                 </div>

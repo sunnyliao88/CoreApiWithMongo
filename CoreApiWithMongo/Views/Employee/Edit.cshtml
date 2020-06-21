@@ -1,33 +1,58 @@
 ﻿@model EmployeeEditVM
+@inject IDepartmentService _departmentService
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>@Model.Name</h1>
+<h1><img class="col-sm-4 img-fluid" src="data:image/png;base64,@Model.Photo" asp-append-version="true" />@Model.Name</h1>
 <hr />
 
 <div class="">
     <div class="">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
-            
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
-                <label class="control-label">Department</label>              
-                
-                <select asp-for="DepartmentId" asp-items="@Model.Departments" class="form-control"> </select>
+                <label class="control-label">Department</label>
+                <select asp-for="DepartmentId" asp-items="@_departmentService.GetDepartmentSelectListItems()" class="form-control"> </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
             </div>
-            
+
+            <div class="form-group">
+                <label asp-for="UploadPhoto" class="control-label"></label>
+                <input asp-for="UploadPhoto" class="form-control" />
+                <span asp-validation-for="UploadPhoto" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Resume" class="control-label"></label>
+                @if (string.IsNullOrEmpty(Model.Resume))
+                {
+                    @: No Resume Updated
+                }
+                else
+                {
+                    <a href="#" class="btn btn-info">Download Resume</a>
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="UploadResume" class="control-label"></label>
+                <input asp-for="UploadResume" class="form-control" />
+                <span asp-validation-for="UploadResume" class="text-danger"></span>
+            </div>
+
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-warning float-md-right ">Cancel</a>
+
+                <a asp-action="Index" asp-controller="employee" class="btn btn-sm btn-danger float-sm-right">Back To List</a>
             </div>
         </form>
     </div>

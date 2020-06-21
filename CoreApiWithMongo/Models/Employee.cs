@@ -13,22 +13,15 @@ namespace CoreApiWithMongo.Models
     public class Employee
     {
         public int ID { get; set; }
-
         [Required]
         public string Name { get; set; }
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
         public int DepartmentId { get; set; }
-        public string FileContent { get; set; }
-        public string FileName { get; set; }
+        public string Resume { get; set; }
+        public string Photo { get; set; }        
 
         public virtual Department Department { get; set; }
-
-        
-
-
     }
 }

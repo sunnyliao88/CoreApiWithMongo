@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Net.Http.Headers;
+using CoreApiWithMongo.Extensions;
+using AutoMapper;
 
 namespace CoreApiWithMongo.Controllers
 {
@@ -18,11 +20,16 @@ namespace CoreApiWithMongo.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly IDepartmentService _departmentService;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeService employeeService,IDepartmentService departmentService)
+        public EmployeeController(IEmployeeService employeeService,
+            IDepartmentService departmentService,
+            IMapper mapper
+            )
         {
             _employeeService = employeeService;
             _departmentService = departmentService;
+            _mapper = mapper;
         }
 
 
@@ -48,7 +55,7 @@ namespace CoreApiWithMongo.Controllers
         [Route("{id?}")]
         public ActionResult Details(int? id)
         {
-            Employee employee = _employeeService.GetEmployeeById(id ?? 1);            
+            Employee employee = _employeeService.GetEmployeeById(id ?? 1);
             return View(employee);
             //return View("../test/test1", employee);
         }
@@ -57,19 +64,6 @@ namespace CoreApiWithMongo.Controllers
         public ActionResult Create()
         {
             EmployeeCreateVM model = new EmployeeCreateVM();
-            var selectList = new List<SelectListItem>();
-            selectList.Add(
-                new SelectListItem()
-                {
-                    Text = "Select..",
-                    Value = ""
-                });
-
-            foreach (var department in _departmentService.GetDepartments())
-            {
-                selectList.Add(new SelectListItem() { Text = department.DepartmentName, Value = department.Id.ToString() });
-            }
-            model.Departments = selectList;
             return View(model);
         }
 
@@ -84,25 +78,12 @@ namespace CoreApiWithMongo.Controllers
 
             try
             {
-                Employee employee = new Employee()
+                Employee employee = _mapper.Map<Employee>(model);
+                if (string.IsNullOrEmpty(employee.Photo))
                 {
-                    Name = model.Name,
-                    Email = model.Email,                    
-                    DepartmentId = model.DepartmentId
-                };
-
-                if (model.UploadFile != null)
-                {
-                    employee.FileName = model.UploadFile.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        model.UploadFile.CopyTo(ms);
-                        byte[] bytes = ms.ToArray();
-                        string fileContent = Convert.ToBase64String(bytes);
-                        employee.FileContent = fileContent;
-                    }
+                    employee.Photo = _employeeService.GetDefaultPhoto();
                 }
-                
+
                 Employee addedEmployee = _employeeService.Add(employee);
                 return RedirectToAction(nameof(Details), new { id = addedEmployee.ID });
             }
@@ -117,27 +98,7 @@ namespace CoreApiWithMongo.Controllers
         public ActionResult Edit(int id)
         {
             Employee employee = _employeeService.GetEmployeeById(id);
-            var selectList = new List<SelectListItem>();
-
-            foreach (var department in _departmentService.GetDepartments())
-            {
-                var selectListItem = new SelectListItem()
-                {
-                    Text = department.DepartmentName,
-                    Value = department.Id.ToString()
-                };                
-                selectList.Add(selectListItem);
-            }
-
-
-            EmployeeEditVM model = new EmployeeEditVM()
-            {
-                Departments = selectList,
-                
-                Name = employee.Name,
-                Email = employee.Email,  
-                DepartmentId=employee.DepartmentId                
-            };
+            EmployeeEditVM model = _mapper.Map<EmployeeEditVM>(employee);
             return View(model);
         }
 
@@ -147,16 +108,19 @@ namespace CoreApiWithMongo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EmployeeEditVM model)
         {
+            ModelState.Remove("Name");
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
             try
             {
+                Employee newEmployee = _mapper.Map<Employee>(model);
                 Employee employee = _employeeService.GetEmployeeById(id);
-                employee.Name = model.Name;
-                employee.Email = model.Email;
-                employee.DepartmentId = model.DepartmentId;
+                employee.Email = newEmployee.Email;
+                employee.DepartmentId = newEmployee.DepartmentId;
+                employee.Photo = newEmployee.Photo ?? employee.Photo;
+                employee.Resume = newEmployee.Resume ?? employee.Resume;
 
                 _employeeService.Update(employee);
                 return RedirectToAction(nameof(Index));
@@ -180,7 +144,7 @@ namespace CoreApiWithMongo.Controllers
             }
             else
             {
-                 return new NotFoundResult();
+                return new NotFoundResult();
             }
         }
 
@@ -202,7 +166,7 @@ namespace CoreApiWithMongo.Controllers
             }
             catch
             {
-                  return StatusCode(500);
+                return StatusCode(500);
             }
         }
 
@@ -214,7 +178,7 @@ namespace CoreApiWithMongo.Controllers
         //{
         //    Employee employee = _employeeService.GetEmployeeById(id ?? 1);
         //    return new FileContentResult((employee.FileContent, "application/pdf");
-            
+
         //}
     }
 }

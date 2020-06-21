@@ -8,6 +8,9 @@ using CoreApiWithMongo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using CoreApiWithMongo.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace CoreApiWithMongo.Services
 {
@@ -18,6 +21,7 @@ namespace CoreApiWithMongo.Services
         Employee GetEmployeeById(int id);        
         Employee Update(Employee employee);
         Employee Delete(int id);
+        string GetDefaultPhoto();
     }
 
     public class MockEmployeeService : IEmployeeService
@@ -54,6 +58,11 @@ namespace CoreApiWithMongo.Services
             return employee;
         }
 
+        public string GetDefaultPhoto()
+        {
+            throw new NotImplementedException();
+        }
+
         public Employee GetEmployeeById(int id)
         {
             return _employees.FirstOrDefault(e => e.ID == id);
@@ -82,10 +91,12 @@ namespace CoreApiWithMongo.Services
     public class SQLEmployeeService : IEmployeeService
     {
         private readonly AppDBContext _appDBContext;
+        private readonly IHostingEnvironment _env;
 
-        public SQLEmployeeService(AppDBContext appDBContext)
+        public SQLEmployeeService(AppDBContext appDBContext, IHostingEnvironment env)
         {
             _appDBContext = appDBContext;
+            _env = env;
         }
 
         public Employee Add(Employee employee)
@@ -104,6 +115,15 @@ namespace CoreApiWithMongo.Services
                 _appDBContext.SaveChanges();
             }
             return employee;
+        }
+
+        public string GetDefaultPhoto()
+        {
+            string result = string.Empty;
+            var defaultPhotoPath = Path.Combine(_env.ContentRootPath, "wwwroot","Images", "DefaultPhoto.jpg");
+            byte[] imgdata = File.ReadAllBytes(defaultPhotoPath);
+            result = Convert.ToBase64String(File.ReadAllBytes(defaultPhotoPath));
+            return result;
         }
 
         public Employee GetEmployeeById(int id)

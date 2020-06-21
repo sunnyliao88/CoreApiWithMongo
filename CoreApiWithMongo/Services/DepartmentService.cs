@@ -8,12 +8,14 @@ using CoreApiWithMongo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using CoreApiWithMongo.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CoreApiWithMongo.Services
 {
     public interface IDepartmentService
     {       
-        IEnumerable<Department> GetDepartments();        
+        IEnumerable<Department> GetDepartments();
+        List<SelectListItem> GetDepartmentSelectListItems();
     }
 
     public class MockDepartmentService : IDepartmentService
@@ -30,8 +32,12 @@ namespace CoreApiWithMongo.Services
         public IEnumerable<Department> GetDepartments()
         {
             return _departments;
-        }       
+        }
 
+        public List<SelectListItem> GetDepartmentSelectListItems()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -48,7 +54,30 @@ namespace CoreApiWithMongo.Services
         {
             var departments = _appDBContext.Departments;
             return departments;
-        }        
+        }
+
+        public List<SelectListItem> GetDepartmentSelectListItems()
+        {
+            List<SelectListItem> result = new List<SelectListItem>();
+            result.Add(
+                new SelectListItem()
+                {
+                    Text = "Select..",
+                    Value = ""
+                });
+            foreach (var department in _appDBContext.Departments)
+            {
+                var selectListItem = new SelectListItem()
+                {
+                    Text = department.DepartmentName,
+                    Value = department.Id.ToString()
+                };
+                result.Add(selectListItem);
+            }
+            return result;
+        }
+
+
     }
 
     /*

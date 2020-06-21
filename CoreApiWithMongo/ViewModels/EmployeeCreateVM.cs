@@ -14,15 +14,12 @@ namespace CoreApiWithMongo.ViewModels
     {
         [Required]
         public string Name { get; set; }
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
         public int DepartmentId { get; set; }
-
-        public IEnumerable<SelectListItem> Departments { get; set; }       
-        public IFormFile UploadFile { get; set; }
+        public IFormFile UploadResume { get; set; }
+        public IFormFile UploadPhoto { get; set; }
 
     }
 
