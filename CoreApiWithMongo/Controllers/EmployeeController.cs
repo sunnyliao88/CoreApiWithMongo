@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Net.Http.Headers;
 using CoreApiWithMongo.Extensions;
 using AutoMapper;
+using static MongoDB.Libmongocrypt.CryptContext;
+using System.Net;
 
 namespace CoreApiWithMongo.Controllers
 {
@@ -24,8 +26,7 @@ namespace CoreApiWithMongo.Controllers
 
         public EmployeeController(IEmployeeService employeeService,
             IDepartmentService departmentService,
-            IMapper mapper
-            )
+            IMapper mapper)
         {
             _employeeService = employeeService;
             _departmentService = departmentService;
@@ -35,7 +36,6 @@ namespace CoreApiWithMongo.Controllers
 
 
         [Route("/")]
-        //   [Route("/[controller]")]
         [Route("")]
         //[Route("Employee")]
         //[Route("Employee/Index")]
@@ -44,7 +44,7 @@ namespace CoreApiWithMongo.Controllers
         public ActionResult Index()
         {
             IEnumerable<Employee> employees = _employeeService.GetEmployees();
-            //return new ObjectResult(employees);
+            //return new ObjectResult(employees);            
             return View(employees);
         }
 
@@ -56,6 +56,10 @@ namespace CoreApiWithMongo.Controllers
         public ActionResult Details(int? id)
         {
             Employee employee = _employeeService.GetEmployeeById(id ?? 1);
+            if (employee == null)
+            {
+                return BadRequest();// NotFound();
+            }
             return View(employee);
             //return View("../test/test1", employee);
         }
@@ -76,21 +80,14 @@ namespace CoreApiWithMongo.Controllers
                 return View(model);
             }
 
-            try
+            Employee employee = _mapper.Map<Employee>(model);
+            if (string.IsNullOrEmpty(employee.Photo))
             {
-                Employee employee = _mapper.Map<Employee>(model);
-                if (string.IsNullOrEmpty(employee.Photo))
-                {
-                    employee.Photo = _employeeService.GetDefaultPhoto();
-                }
+                employee.Photo = _employeeService.GetDefaultPhoto();
+            }
 
-                Employee addedEmployee = _employeeService.Add(employee);
-                return RedirectToAction(nameof(Details), new { id = addedEmployee.ID });
-            }
-            catch
-            {
-                return View(model);
-            }
+            Employee addedEmployee = _employeeService.Add(employee);
+            return RedirectToAction(nameof(Details), new { id = addedEmployee.ID });
         }
 
         [Route("{id}")]
@@ -98,6 +95,11 @@ namespace CoreApiWithMongo.Controllers
         public ActionResult Edit(int id)
         {
             Employee employee = _employeeService.GetEmployeeById(id);
+
+            if (employee == null)
+            {
+                return BadRequest(); // NotFound();
+            }
             EmployeeEditVM model = _mapper.Map<EmployeeEditVM>(employee);
             return View(model);
         }
@@ -113,22 +115,16 @@ namespace CoreApiWithMongo.Controllers
             {
                 return View(model);
             }
-            try
-            {
-                Employee newEmployee = _mapper.Map<Employee>(model);
-                Employee employee = _employeeService.GetEmployeeById(id);
-                employee.Email = newEmployee.Email;
-                employee.DepartmentId = newEmployee.DepartmentId;
-                employee.Photo = newEmployee.Photo ?? employee.Photo;
-                employee.Resume = newEmployee.Resume ?? employee.Resume;
 
-                _employeeService.Update(employee);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View(model);
-            }
+            Employee newEmployee = _mapper.Map<Employee>(model);
+            Employee employee = _employeeService.GetEmployeeById(id);
+            employee.Email = newEmployee.Email;
+            employee.DepartmentId = newEmployee.DepartmentId;
+            employee.Photo = newEmployee.Photo ?? employee.Photo;
+            employee.Resume = newEmployee.Resume ?? employee.Resume;
+
+            _employeeService.Update(employee);
+            return RedirectToAction(nameof(Index));
         }
 
         [Route("{id}")]
@@ -138,14 +134,11 @@ namespace CoreApiWithMongo.Controllers
         public ActionResult Delete(int id)
         {
             Employee employee = _employeeService.GetEmployeeById(id);
-            if (employee != null)
+            if (employee == null)
             {
-                return View(employee);
+                return BadRequest(); // NotFound();
             }
-            else
-            {
-                return new NotFoundResult();
-            }
+            return View(employee);
         }
 
         // POST: Employee/Delete/5
@@ -154,21 +147,11 @@ namespace CoreApiWithMongo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Employee employee)
         {
-            try
-            {
-                employee = _employeeService.GetEmployeeById(id);
-                if (employee == null)
-                {
-                    return new NotFoundResult();
-                }
-                _employeeService.Delete(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            _employeeService.Delete(id);
+            return RedirectToAction(nameof(Index));
         }
+
+
 
 
 

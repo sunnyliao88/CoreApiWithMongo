@@ -128,7 +128,7 @@ namespace CoreApiWithMongo.Services
 
         public Employee GetEmployeeById(int id)
         {
-            var employee = _appDBContext.Employees.Include(e => e.Department).FirstOrDefault(e => e.ID == id);
+            var employee = _appDBContext.Employees.Include(e => e.Department).FirstOrDefault(e => e.ID == id);            
             return employee;
         }
 

@@ -1,0 +1,14 @@
+﻿@model ErrorVM
+@using System.Net
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="alert alert-danger m-2">
+    <h3>@Model.StatusCode @Enum.Parse(typeof(HttpStatusCode), Model.StatusCode.ToString()) </h3>
+    <hr />
+    <div >@Model.Message</div>
+</div>
+<a asp-action="Index" asp-controller="employee" class="btn btn-primary mt-4">Back To List</a>
+

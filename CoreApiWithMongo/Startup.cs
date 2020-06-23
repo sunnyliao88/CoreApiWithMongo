@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using CoreApiWithMongo.AutoMap;
@@ -67,35 +68,14 @@ namespace CoreApiWithMongo
             }
             else
             {
-                /*  ExceptionHandlerOptions options = new ExceptionHandlerOptions();
-                  options.ExceptionHandlingPath = new PathString("/api/error");
-                  app.UseExceptionHandler(options);
-
-                  StatusCodePagesOptions statusCodePagesOptions = new StatusCodePagesOptions();
-                  StatusCodeContext.
-                  statusCodePagesOptions.HandleAsync =
-                  app.UseStatusCodePages(context => context.HttpContext.)
-               app.UseStatusCodePagesWithRedirects();
-               */
+                app.UseExceptionHandler("/Exception");
+                app.UseStatusCodePagesWithReExecute("/StatusCodePages/{0}");               
             }
 
-
-            /* app.Use(async (context, next) =>
-             {
-                 logger.LogInformation("*******************");
-                 logger.Log(LogLevel.Warning, "this is log message for request f");
-                 await next();
-                 logger.Log(LogLevel.Error, "this is log message for response f");
-             });
-             */
-
-            // app.UseFileServer();
-            // app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles();// app.UseFileServer(); // app.UseDefaultFiles();
 
             app.UseMiddleware<MiddleWareDemo>();
 
-            // app.UseMvc();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -104,7 +84,6 @@ namespace CoreApiWithMongo
                     );
 
             });
-            // app.UseMvc();
 
 
             /*  app.Use(async (context, next) =>
