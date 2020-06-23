@@ -6,20 +6,28 @@ using CoreApiWithMongo.ViewModels;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CoreApiWithMongo.Controllers
 {
 
     public class ErrorController : Controller
     {
+        private readonly ILogger _logger;
+
+        public ErrorController(ILogger<ErrorController> logger)
+        {
+            _logger = logger;
+        }
+
         [Route("Exception")]
         public IActionResult ExceptionHandler()
         {
             ErrorVM error = new ErrorVM();
             var feature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             error.StatusCode = HttpContext.Response.StatusCode;
-            error.Message = $"Unhandled error at {feature?.Path}, contact our support teadm at xxx please";
-            
+            error.Message = $"An exception occured while processing your request at {feature?.Path}. The support team is notified";
+            _logger.LogError(feature.Error.GetType().Name);
             return View("Error", error);
         }
 
@@ -39,7 +47,7 @@ namespace CoreApiWithMongo.Controllers
                     message = $"Resource {feature?.OriginalPath}  NOT found";
                     break;
                 case 500:
-                    message = $"Unhandled error, contact our support teadm at xxx please";
+                    message = $"An exception occured while processing your request at {feature?.OriginalPath}. The support team is notified";
                     break;
             }
 

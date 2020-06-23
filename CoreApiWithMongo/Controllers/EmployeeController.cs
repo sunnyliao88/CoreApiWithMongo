@@ -58,7 +58,7 @@ namespace CoreApiWithMongo.Controllers
             Employee employee = _employeeService.GetEmployeeById(id ?? 1);
             if (employee == null)
             {
-                return BadRequest();// NotFound();
+                return  NotFound();
             }
             return View(employee);
             //return View("../test/test1", employee);
@@ -98,7 +98,7 @@ namespace CoreApiWithMongo.Controllers
 
             if (employee == null)
             {
-                return BadRequest(); // NotFound();
+                return  NotFound();
             }
             EmployeeEditVM model = _mapper.Map<EmployeeEditVM>(employee);
             return View(model);
@@ -136,7 +136,7 @@ namespace CoreApiWithMongo.Controllers
             Employee employee = _employeeService.GetEmployeeById(id);
             if (employee == null)
             {
-                return BadRequest(); // NotFound();
+                return  NotFound();
             }
             return View(employee);
         }
